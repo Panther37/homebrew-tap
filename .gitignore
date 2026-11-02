@@ -1,0 +1,26 @@
+# Environments
+.venv/
+.env
+
+# Homebrew test-bot
+steps_output.txt
+*.bottle.*
+
+# IDE
+.idea/
+
+# macOS
+.DS_Store
+._*
+
+# Project
+docs/
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/

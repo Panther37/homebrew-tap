@@ -1,16 +1,23 @@
 # Panther37 Tap
 
-## How do I install these formulae?
+## How do I install these formulae and casks?
 
-`brew install panther37/tap/<formula>`
+### Installing FreshenMac (Cask)
 
-Or `brew tap panther37/tap` and then `brew install <formula>`.
+```bash
+brew install --cask panther37/tap/freshenmac
+```
 
-Or, in a `brew bundle` `Brewfile`:
+Or tap first:
+```bash
+brew tap panther37/tap
+brew install --cask freshenmac
+```
 
+Or in a `brew bundle` `Brewfile`:
 ```ruby
 tap "panther37/tap"
-brew "<formula>"
+cask "freshenmac"
 ```
 
 ## Documentation
