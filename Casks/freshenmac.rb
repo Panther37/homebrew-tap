@@ -21,22 +21,20 @@ cask "freshenmac" do
   # - On first install (plist not yet present): runs `--action Install` with `sudo: true`.
   # - On upgrade (plist already present): does nothing! Homebrew already updated the
   #   `#{HOMEBREW_PREFIX}/bin/freshenmac` symlink to the new version.
-  postflight do
-    unless File.exist?("/Library/LaunchAgents/com.panther37.FreshenMac.plist")
-      system_command "#{HOMEBREW_PREFIX}/bin/freshenmac",
-                     args: ["--action", "Install"],
-                     sudo: true
+  postflight_steps do
+    unless_path_exists "/Library/LaunchAgents/com.panther37.FreshenMac.plist" do
+      run "{{HOMEBREW_PREFIX}}/bin/freshenmac",
+          args: ["--action", "Install"],
+          sudo: true
     end
   end
 
-  # Only tear down the LaunchAgent on an actual `brew uninstall`, NEVER during `brew upgrade` or `brew reinstall`.
-  uninstall_preflight do
-    if !ARGV.include?("upgrade") && !ARGV.include?("reinstall") &&
-       File.exist?("#{staged_path}/FreshenMac-#{version}/src/FreshenMac.py")
-      system_command "#{staged_path}/FreshenMac-#{version}/src/FreshenMac.py",
-                     args:         ["--action", "Uninstall"],
-                     must_succeed: false,
-                     sudo:         true
+  uninstall_preflight_steps do
+    if_path_exists "{{staged_path}}/FreshenMac-{{version}}/src/FreshenMac.py" do
+      run "{{staged_path}}/FreshenMac-{{version}}/src/FreshenMac.py",
+          args:         ["--action", "Uninstall"],
+          must_succeed: false,
+          sudo:         true
     end
   end
 
