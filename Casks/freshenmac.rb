@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 cask "freshenmac" do
-  version "1.5.0"
-  sha256 "6d9405679f906a2ce9d7b6b4ac414ecb5940f58da5ede63ac04f18b167a4a31b"
+  version "2.0.0"
+  sha256 "cc2f396a61a851fc4cf289367b4ada146bdc90aac638d37b5797909040934b0b"
 
   url "https://github.com/Panther37/FreshenMac/archive/refs/tags/v#{version}.tar.gz"
   name "FreshenMac"
