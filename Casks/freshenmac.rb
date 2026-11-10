@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 cask "freshenmac" do
-  version "2.1.0"
-  sha256 "db51d1526262057d8c070d114698cee39ed253ecaa3d678fe920201570398b01"
+  version "2.1.1"
+  sha256 "61bb6c27cfc7861d9bdd13423e31d6679191fc3f3814e0463eca13be8503c727"
 
   url "https://github.com/Panther37/FreshenMac/archive/refs/tags/v#{version}.tar.gz"
   name "FreshenMac"
@@ -26,15 +26,6 @@ cask "freshenmac" do
       run "{{HOMEBREW_PREFIX}}/bin/freshenmac",
           args: ["--action", "Install"],
           sudo: true
-    end
-  end
-
-  uninstall_preflight_steps do
-    if_path_exists "{{staged_path}}/FreshenMac-{{version}}/src/FreshenMac.py" do
-      run "{{staged_path}}/FreshenMac-{{version}}/src/FreshenMac.py",
-          args:         ["--action", "Uninstall"],
-          must_succeed: false,
-          sudo:         true
     end
   end
 
