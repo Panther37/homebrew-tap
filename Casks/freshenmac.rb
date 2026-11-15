@@ -19,19 +19,37 @@ cask "freshenmac" do
 
   # Set-and-forget install:
   # - On first install (plist not yet present): runs `--action Install` with `sudo: true`.
-  # - On upgrade (plist already present): does nothing! Homebrew already updated the
-  #   `#{HOMEBREW_PREFIX}/bin/freshenmac` symlink to the new version.
+  # - On upgrade (plist already present): skips `--action Install` unless LaunchAgent stdout/stderr
+  #   logs are missing, so normal upgrades don't require `sudo` while broken logs are repaired.
   postflight_steps do
     unless_path_exists "/Library/LaunchAgents/com.panther37.FreshenMac.plist" do
       run "{{HOMEBREW_PREFIX}}/bin/freshenmac",
           args: ["--action", "Install"],
           sudo: true
     end
+
+    if_path_exists "/Library/LaunchAgents/com.panther37.FreshenMac.plist" do
+      unless_path_exists "/Library/Logs/com.panther37.FreshenMac.stdout.log" do
+        run "{{HOMEBREW_PREFIX}}/bin/freshenmac",
+            args: ["--action", "Install"],
+            sudo: true
+      end
+
+      if_path_exists "/Library/Logs/com.panther37.FreshenMac.stdout.log" do
+        unless_path_exists "/Library/Logs/com.panther37.FreshenMac.stderr.log" do
+          run "{{HOMEBREW_PREFIX}}/bin/freshenmac",
+              args: ["--action", "Install"],
+              sudo: true
+        end
+      end
+    end
   end
 
   zap delete: [
         "/etc/sudoers.d/freshenmac",
         "/Library/LaunchAgents/com.panther37.FreshenMac.plist",
+        "/Library/Logs/com.panther37.FreshenMac.stderr.log",
+        "/Library/Logs/com.panther37.FreshenMac.stdout.log",
         "/Library/Logs/FreshenMac.log",
         "/Library/Preferences/com.panther37.FreshenMac.plist",
         "/Library/scripts/User/freshenmac", # Legacy script directory
